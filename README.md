@@ -90,7 +90,7 @@ CHECK((SELECT college_id FROM students s WHERE s.id = student_id) =
 2. `POST /students` → `{"name": "John", "collegeId": 1}`
 3. `POST /courses` → `{"code": "CS101", "title": "Intro CS", "collegeId": 1}`
 4. `POST /courses/1/timetables` → `{"dayOfWeek": 1, "startTime": "09:00", "endTime": "10:00"}`
-5. `POST /enrollments` → `{"studentId": 1, "courseIds": [1]}` ✅
+5. `POST /enrollments` → `{"studentId": 1, "courseIds": [1]}`
 
 ## Assignment Coverage
 
