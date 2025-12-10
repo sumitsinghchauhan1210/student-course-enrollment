@@ -31,9 +31,9 @@ Backend system for student course enrollment with timetable clash detection.
 
 ### 1. Clone & Install
 
-git clone https://github.com/sumitsinghchauhan1210/student-course-enrollment.git
-cd student-course-enrollment
-npm install
+- git clone https://github.com/sumitsinghchauhan1210/student-course-enrollment.git
+- cd student-course-enrollment
+- npm install
 
 ### 2. Environment (.env)
 
