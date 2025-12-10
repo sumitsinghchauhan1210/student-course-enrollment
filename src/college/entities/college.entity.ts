@@ -4,7 +4,7 @@ import { Student } from 'src/student/entities/student.entity';
 @Table({ tableName: 'colleges' })
 export class College extends Model {
   @Column({ allowNull: false })
-  name: string;
+  declare name: string;
 
   @HasMany(() => Student)
   students: Student[];

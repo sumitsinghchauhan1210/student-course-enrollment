@@ -14,14 +14,14 @@ import { StudentCourseSelection } from './student-course-selection.entity';
 @Table({ tableName: 'courses' })
 export class Course extends Model {
   @Column({ allowNull: false })
-  code: string;
+  declare code: string;
 
   @Column({ allowNull: false })
-  title: string;
+  declare title: string;
 
   @ForeignKey(() => College)
   @Column({ field: 'college_id', type: DataType.BIGINT, allowNull: false })
-  collegeId: number;
+  declare collegeId: number;
 
   @BelongsTo(() => College)
   college: College;

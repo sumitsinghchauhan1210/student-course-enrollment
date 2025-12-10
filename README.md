@@ -1,98 +1,114 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Student Course Enrollment System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![NestJS](https://img.shields.io/badge/NestJS-%23E0234E.svg?&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192.svg?&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Swagger](https://img.shields.io/badge/Swagger-85EA2D.svg?&logo=swagger&logoColor=black)](https://swagger.io/)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Backend system for student course enrollment with timetable clash detection.
 
-## Description
+## Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+✅ **Core Requirements**:
 
-## Project setup
+- Colleges, students, courses, course timetables, student-course selections
+- Enroll API: `POST /enrollments` validates:
+  - Student/courses exist + same college
+  - No timetable clashes (new courses + existing enrollment)
+  - Edge cases (empty list, invalid IDs)
 
-```bash
-$ npm install
-```
+🎯 **Bonus Points**:
 
-## Compile and run the project
+- DB constraints: FKs, unique selections, same-college CHECK, Triggers
+- Admin timetable APIs (add/edit/delete) that protect enrolled students
 
-```bash
-# development
-$ npm run start
+## Tech Stack
 
-# watch mode
-$ npm run start:dev
+- **NestJS** (TypeScript)
+- **PostgreSQL** + **Sequelize**
+- **Swagger** (OpenAPI docs)
 
-# production mode
-$ npm run start:prod
-```
+## Quick Start
 
-## Run tests
+### 1. Clone & Install
 
-```bash
-# unit tests
-$ npm run test
+git clone https://github.com/sumitsinghchauhan1210/student-course-enrollment.git
+cd student-course-enrollment
+npm install
 
-# e2e tests
-$ npm run test:e2e
+### 2. Environment (.env)
 
-# test coverage
-$ npm run test:cov
-```
+`DB_HOST=localhost`
+`DB_PORT=5432`
+`DB_USERNAME=postgres`
+`DB_PASSWORD=password`
+`DB_NAME=enrollment_db`
 
-## Deployment
+### 3. Postgres
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Docker (recommended)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+`docker run -d --name postgres-enroll -e POSTGRES_DB=enrollment_db -e POSTGRES_PASSWORD=password -p 5432:5432 postgres:15`
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+`npm run start:dev`
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+**API**: `http://localhost:3000`  
+**Swagger**: `http://localhost:3000/api`
 
-## Resources
+## Database Schema
 
-Check out a few resources that may come in handy when working with NestJS:
+- colleges (id, name)
+- students (id, name, college_id → colleges)
+- courses (id, code, title, college_id → colleges)
+- course_timetables (id, course_id → courses, day_of_week, start_time, end_time)
+- student_course_selections (id, student_id → students, course_id → courses)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+**Bonus Constraints**:
+-- Unique enrollment per student+course
+UNIQUE(student_id, course_id)
 
-## Support
+-- Same college enforcement
+CHECK((SELECT college_id FROM students s WHERE s.id = student_id) =
+(SELECT college_id FROM courses c WHERE c.id = course_id))
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Full `schema.sql` included in repo.
 
-## Stay in touch
+## API Endpoints
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Method   | Endpoint                        | Description                            |
+| -------- | ------------------------------- | -------------------------------------- |
+| `POST`   | `/colleges`                     | Create college                         |
+| `POST`   | `/students`                     | Create student                         |
+| `POST`   | `/courses`                      | Create course                          |
+| `POST`   | `/courses/:courseId/timetables` | Add timetable slot                     |
+| `POST`   | `/enrollments`                  | **Core**: Enroll with clash validation |
+| `PATCH`  | `/timetables/:id`               | **Bonus**: Update safely               |
+| `DELETE` | `/timetables/:id`               | **Bonus**: Delete slot                 |
 
-## License
+**Test Flow** (Swagger `/api`):
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+1. `POST /colleges` → `{"name": "MIT"}`
+2. `POST /students` → `{"name": "John", "collegeId": 1}`
+3. `POST /courses` → `{"code": "CS101", "title": "Intro CS", "collegeId": 1}`
+4. `POST /courses/1/timetables` → `{"dayOfWeek": 1, "startTime": "09:00", "endTime": "10:00"}`
+5. `POST /enrollments` → `{"studentId": 1, "courseIds": [1]}` ✅
+
+## Assignment Coverage
+
+| Requirement              | Status                                           |
+| ------------------------ | ------------------------------------------------ |
+| Database schema          | ✅ All entities + relationships                  |
+| Save enrollment function | ✅ With all validations                          |
+| Edge cases               | ✅ Empty list, invalid IDs                       |
+| **Bonus DB constraints** | ✅ FKs, CHECK, UNIQUE                            |
+| **Bonus admin APIs**     | ✅ Timetable CRUD w/ protection                  |
+| **Bonus Trigger**        | ✅ Same-college validation on enrollment         |
+| **Bonus Trigger**        | ✅ No self-overlapping timetables per course/day |
+| **ERD**                  | ✅ ERD diagram                                   |
+
+## Deliverables Ready
+
+- `schema.sql` – Complete schema + Triggers
+- `ERD.png` - Entity Relationship Diagram
+- `src/enrollment/enrollment.service.ts` – Core enroll function
+- Full NestJS app with Swagger docs
+- This README

@@ -12,20 +12,20 @@ import { Course } from './course.entity';
 export class CourseTimetable extends Model {
   @ForeignKey(() => Course)
   @Column({ field: 'course_id', type: DataType.BIGINT, allowNull: false })
-  courseId: number;
+  declare courseId: number;
 
   @Column({
     field: 'day_of_week',
     type: DataType.SMALLINT,
     allowNull: false,
   })
-  dayOfWeek: number; // 1=Monday ... 7=Sunday
+  declare dayOfWeek: number; // 1=Monday ... 7=Sunday
 
   @Column({ type: DataType.TIME, allowNull: false })
-  startTime: string;
+  declare startTime: string;
 
   @Column({ type: DataType.TIME, allowNull: false })
-  endTime: string;
+  declare endTime: string;
 
   @BelongsTo(() => Course)
   course: Course;

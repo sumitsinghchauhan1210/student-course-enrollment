@@ -7,7 +7,6 @@ export class CollegeService {
   constructor(@InjectModel(College) private collegeModel: typeof College) {}
 
   create(createCollegeDto: { name: string }): Promise<College> {
-    console.log('in service');
     return this.collegeModel.create({ name: createCollegeDto.name });
   }
 

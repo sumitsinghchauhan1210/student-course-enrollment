@@ -13,7 +13,7 @@ import { StudentCourseSelection } from 'src/enrollment/entities/student-course-s
 @Table({ tableName: 'students' })
 export class Student extends Model {
   @Column({ allowNull: false })
-  name: string;
+  declare name: string;
 
   @ForeignKey(() => College) // ✅ FIX: Explicit foreign key
   @Column({
@@ -21,7 +21,7 @@ export class Student extends Model {
     type: DataType.BIGINT,
     allowNull: false,
   })
-  collegeId: number;
+  declare collegeId: number;
 
   @BelongsTo(() => College)
   college: College;

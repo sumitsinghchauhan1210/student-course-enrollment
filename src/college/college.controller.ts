@@ -12,7 +12,6 @@ export class CollegeController {
   @Post()
   @ApiOperation({ summary: 'Create college' })
   create(@Body() createCollegeDto: CreateCollegeDto): Promise<College> {
-    console.log('In controller');
     return this.collegeService.create(createCollegeDto);
   }
 

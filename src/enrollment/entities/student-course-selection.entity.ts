@@ -13,11 +13,11 @@ import { Course } from './course.entity';
 export class StudentCourseSelection extends Model {
   @ForeignKey(() => Student)
   @Column({ field: 'student_id', type: DataType.BIGINT, allowNull: false })
-  studentId: number;
+  declare studentId: number;
 
   @ForeignKey(() => Course)
   @Column({ field: 'course_id', type: DataType.BIGINT, allowNull: false })
-  courseId: number;
+  declare courseId: number;
 
   @BelongsTo(() => Student, 'studentId')
   student: Student;
