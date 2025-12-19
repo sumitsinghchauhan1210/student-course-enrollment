@@ -20,7 +20,6 @@ export class EnrollmentService {
     @InjectModel(Student) private studentModel: typeof Student,
   ) {}
 
-  // existing:
   createCourse(dto: CreateCourseDto) {
     return this.courseModel.create({
       code: dto.code,
