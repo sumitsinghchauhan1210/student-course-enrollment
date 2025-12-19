@@ -42,7 +42,6 @@ export class EnrollmentService {
       throw new BadRequestException('startTime must be before endTime');
     }
 
-    // simple per-course clash check
     const existing = await this.timetableModel.findAll({
       where: { courseId: courseId, dayOfWeek: dto.dayOfWeek },
     });
@@ -75,13 +74,11 @@ export class EnrollmentService {
       throw new BadRequestException('courseIds cannot be empty');
     }
 
-    // 1) Load student with college
     const student = await this.studentModel.findByPk(studentId);
     if (!student) {
       throw new BadRequestException('Student not found');
     }
 
-    // 2) Load courses and ensure all exist + same college
     const courses = await this.courseModel.findAll({
       where: { id: courseIds },
     });
@@ -99,12 +96,10 @@ export class EnrollmentService {
       );
     }
 
-    // 3) Load timetables for selected courses
     const newSlots = await this.timetableModel.findAll({
       where: { courseId: courseIds },
     });
 
-    // 4) Load existing selections & their timetables
     const existingSelections = await this.selectionModel.findAll({
       where: { studentId },
     });
@@ -116,7 +111,6 @@ export class EnrollmentService {
         })
       : [];
 
-    // 5) Check clashes between new courses themselves
     this.ensureNoClash(newSlots, 'Selected courses have timetable clash');
 
     // 6) Check clashes with already-enrolled courses
@@ -126,7 +120,6 @@ export class EnrollmentService {
       'Selected courses clash with existing enrollment',
     );
 
-    // 7) Save selections (ignore duplicates) in a transaction
     await this.selectionModel.sequelize!.transaction(async (t) => {
       const rows = courseIds.map((courseId) => ({
         studentId,
@@ -181,7 +174,6 @@ export class EnrollmentService {
       throw new BadRequestException('Timetable not found');
     }
 
-    // Merge existing + new values
     const dayOfWeek = body.dayOfWeek ?? timetable.dayOfWeek;
     const startTime = body.startTime ?? timetable.startTime;
     const endTime = body.endTime ?? timetable.endTime;
@@ -190,14 +182,12 @@ export class EnrollmentService {
       throw new BadRequestException('startTime must be before endTime');
     }
 
-    // Load all students enrolled in this course
     const selections = await this.selectionModel.findAll({
       where: { courseId: timetable.courseId },
     });
     const studentIds = selections.map((s) => s.studentId);
 
     if (studentIds.length) {
-      // Load all other courses’ slots for these students
       const otherSelections = await this.selectionModel.findAll({
         where: {
           studentId: studentIds,
@@ -212,7 +202,6 @@ export class EnrollmentService {
           })
         : [];
 
-      // Check clash of new slot vs others
       for (const s of otherSlots) {
         if (s.dayOfWeek !== dayOfWeek) continue;
         const overlap = startTime < s.endTime && s.startTime < endTime;
@@ -224,7 +213,6 @@ export class EnrollmentService {
       }
     }
 
-    // Safe to update
     timetable.dayOfWeek = dayOfWeek;
     timetable.startTime = startTime;
     timetable.endTime = endTime;
